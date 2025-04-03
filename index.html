@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #calculator {
+            display: inline-block;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        #result {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            text-align: right;
+        }
+        .button {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <input type="text" id="result" disabled>
+        <br>
+        <button class="button" onclick="append('7')">7</button>
+        <button class="button" onclick="append('8')">8</button>
+        <button class="button" onclick="append('9')">9</button>
+        <button class="button" onclick="append('/')">/</button>
+        <br>
+        <button class="button" onclick="append('4')">4</button>
+        <button class="button" onclick="append('5')">5</button>
+        <button class="button" onclick="append('6')">6</button>
+        <button class="button" onclick="append('')"></button>
+        <br>
+        <button class="button" onclick="append('1')">1</button>
+        <button class="button" onclick="append('2')">2</button>
+        <button class="button" onclick="append('3')">3</button>
+        <button class="button" onclick="append('-')">-</button>
+        <br>
+        <button class="button" onclick="append('0')">0</button>
+        <button class="button" onclick="append('.')">.</button>
+        <button class="button" onclick="calculate()">=</button>
+        <button class="button" onclick="append('+')">+</button>
+        <br>
+        <button class="button" onclick="clearResult()">C</button>
+        <button class="button" onclick="append('')">^</button>
+        <button class="button" onclick="sqrt()">√</button>
+        <button class="button" onclick="sin()">sin</button>
+        <button class="button" onclick="cos()">cos</button>
+        <button class="button" onclick="tan()">tan</button>
+    </div>
+
+    <script>
+        const result = document.getElementById('result');
+
+        function append(value) {
+            result.value += value;
+        }
+
+        function clearResult() {
+            result.value = '';
+        }
+
+        function calculate() {
+            try {
+                result.value = eval(result.value);
+            } catch {
+                result.value = 'Error';
+            }
+        }
+
+        function sqrt() {
+            try {
+                result.value = Math.sqrt(eval(result.value));
+            } catch {
+                result.value = 'Error';
+            }
+        }
+
+        function sin() {
+            try {
+                result.value = Math.sin(eval(result.value) * Math.PI / 180);
+            } catch {
+                result.value = 'Error';
+            }
+        }
+
+        function cos() {
+            try {
+                result.value = Math.cos(eval(result.value) * Math.PI / 180);
+            } catch {
+                result.value = 'Error';
+            }
+        }
+
+        function tan() {
+            try {
+                result.value = Math.tan(eval(result.value) * Math.PI / 180);
+            } catch {
+                result.value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>
