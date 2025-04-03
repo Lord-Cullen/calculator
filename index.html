@@ -3,116 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scientific Calculator</title>
+    <title>Calculator</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-        #calculator {
-            display: inline-block;
-            border: 1px solid #ccc;
+        .calculator {
+            width: 300px;
+            margin: 50px auto;
+            background-color: #f0f0f0;
             padding: 20px;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        #result {
+
+        .display {
             width: 100%;
-            height: 40px;
+            height: 60px;
+            background-color: white;
             margin-bottom: 10px;
-            font-size: 18px;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 24px;
             text-align: right;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
-        .button {
-            width: 50px;
-            height: 50px;
-            margin: 5px;
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+
+        button {
+            padding: 15px;
             font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .operator {
+            background-color: #f8a51d;
+            color: white;
+        }
+
+        .operator:hover {
+            background-color: #e59400;
+        }
+
+        .equals {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .equals:hover {
+            background-color: #45a049;
+        }
+
+        .clear {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .clear:hover {
+            background-color: #da190b;
         }
     </style>
 </head>
 <body>
-    <div id="calculator">
-        <input type="text" id="result" disabled>
-        <br>
-        <button class="button" onclick="append('7')">7</button>
-        <button class="button" onclick="append('8')">8</button>
-        <button class="button" onclick="append('9')">9</button>
-        <button class="button" onclick="append('/')">/</button>
-        <br>
-        <button class="button" onclick="append('4')">4</button>
-        <button class="button" onclick="append('5')">5</button>
-        <button class="button" onclick="append('6')">6</button>
-        <button class="button" onclick="append('')"></button>
-        <br>
-        <button class="button" onclick="append('1')">1</button>
-        <button class="button" onclick="append('2')">2</button>
-        <button class="button" onclick="append('3')">3</button>
-        <button class="button" onclick="append('-')">-</button>
-        <br>
-        <button class="button" onclick="append('0')">0</button>
-        <button class="button" onclick="append('.')">.</button>
-        <button class="button" onclick="calculate()">=</button>
-        <button class="button" onclick="append('+')">+</button>
-        <br>
-        <button class="button" onclick="clearResult()">C</button>
-        <button class="button" onclick="append('')">^</button>
-        <button class="button" onclick="sqrt()">√</button>
-        <button class="button" onclick="sin()">sin</button>
-        <button class="button" onclick="cos()">cos</button>
-        <button class="button" onclick="tan()">tan</button>
+    <div class="calculator">
+        <input type="text" class="display" readonly>
+        <div class="buttons">
+            <button class="clear">C</button>
+            <button class="operator">(</button>
+            <button class="operator">)</button>
+            <button class="operator">/</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button class="operator">*</button>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button class="operator">-</button>
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button class="operator">+</button>
+            <button>0</button>
+            <button>.</button>
+            <button class="equals">=</button>
+        </div>
     </div>
 
     <script>
-        const result = document.getElementById('result');
+        const display = document.querySelector('.display');
+        const buttons = document.querySelectorAll('button');
+        let currentInput = '';
+        let result = '';
 
-        function append(value) {
-            result.value += value;
-        }
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.textContent;
 
-        function clearResult() {
-            result.value = '';
-        }
+                if (value === 'C') {
+                    currentInput = '';
+                    result = '';
+                    display.value = '';
+                } 
+                else if (value === '=') {
+                    try {
+                        result = eval(currentInput);
+                        display.value = result;
+                        currentInput = result;
+                    } catch (error) {
+                        display.value = 'Error';
+                        currentInput = '';
+                    }
+                } 
+                else {
+                    currentInput += value;
+                    display.value = currentInput;
+                }
+            });
+        });
 
-        function calculate() {
-            try {
-                result.value = eval(result.value);
-            } catch {
-                result.value = 'Error';
+        // Add keyboard support
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            
+            if ((key >= '0' && key <= '9') || key === '.' || 
+                key === '+' || key === '-' || key === '*' || key === '/') {
+                currentInput += key;
+                display.value = currentInput;
             }
-        }
-
-        function sqrt() {
-            try {
-                result.value = Math.sqrt(eval(result.value));
-            } catch {
-                result.value = 'Error';
+            else if (key === 'Enter' || key === '=') {
+                try {
+                    result = eval(currentInput);
+                    display.value = result;
+                    currentInput = result;
+                } catch (error) {
+                    display.value = 'Error';
+                    currentInput = '';
+                }
             }
-        }
-
-        function sin() {
-            try {
-                result.value = Math.sin(eval(result.value) * Math.PI / 180);
-            } catch {
-                result.value = 'Error';
+            else if (key === 'Escape') {
+                currentInput = '';
+                result = '';
+                display.value = '';
             }
-        }
-
-        function cos() {
-            try {
-                result.value = Math.cos(eval(result.value) * Math.PI / 180);
-            } catch {
-                result.value = 'Error';
-            }
-        }
-
-        function tan() {
-            try {
-                result.value = Math.tan(eval(result.value) * Math.PI / 180);
-            } catch {
-                result.value = 'Error';
-            }
-        }
+        });
     </script>
 </body>
 </html>
